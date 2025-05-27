@@ -13,7 +13,6 @@ const Icon = styled.Image`
 
 const IconButton = ({type, onPressOut, id})=>{
   const _onPressOut =()=>{
-    console.log('눌림')
     onPressOut(id);
   }
 
