@@ -21,7 +21,7 @@ const styles=StyleSheet.create({
 
 const HomeScreen=({user,loggedIn,login,logout})=>{
 
- 
+//  
      return(
     <View style={styles.container}>
       {loggedIn?

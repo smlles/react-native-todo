@@ -11,6 +11,8 @@ import AverageCalculator from "./components/Average";
 import Dog from "./components/Dog";
 import Signup from "./components/Signup";
 import { ChangeTheme } from "./components/ChangeTheme";
+import Counter2 from "./components/Counter2";
+import { LoginForm } from "./components/LoginForm";
 
 
 const Container = styled.View`
@@ -60,7 +62,8 @@ const toggleHide =()=>{
     {/* <AverageCalculator/> */}
     {/* <Dog/> */}
     {/* <Signup/> */}
-    <ChangeTheme/>
+    {/* <ChangeTheme/> */}
+    <LoginForm/>
   </Container>
     
   

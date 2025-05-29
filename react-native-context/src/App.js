@@ -6,6 +6,8 @@ import Theme from "./components/ThemeComponent";
 import ThemeProvider from "./contexts/ThemeContext";
 import UserComponent from "./components/UserComponent";
 import { UserProvider } from "./contexts/UserContext";
+import { CartProvider } from "./contexts/CartContext";
+import { CartComponent } from "./components/CartComponent";
 
 const Container = styled.View`
   flex :1;
@@ -27,16 +29,24 @@ const App =()=>{
   //     <Theme/>
   //   </Container>
   // </UserProvider>
+
   // <ThemeProvider>
   //   <Container>
   //   <Theme/>
   //   </Container>
   // </ThemeProvider>
-    <UserProvider>
+
+    // <UserProvider>
+    //   <Container>
+    //     <UserComponent/>
+    //   </Container>
+    // </UserProvider>
+    
+    <CartProvider>
       <Container>
-        <UserComponent/>
+        <CartComponent/>
       </Container>
-    </UserProvider>
+    </CartProvider>
   )
 }
 

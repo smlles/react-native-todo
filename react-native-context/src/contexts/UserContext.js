@@ -14,7 +14,10 @@ export const UserContext =createContext({
   loggedIn : false,
   dispatch:()=>{}
 })
+
 const userData = {name :'John Doe'};
+
+
 export const UserProvider =({children})=>{
   //유저의 데이터 
   const [user,setUser] =useState(null);
@@ -22,12 +25,15 @@ export const UserProvider =({children})=>{
   const [loggedIn,setLoggedIn]=useState(false);
 
   const login=()=>{
+    
     setUser(userData);
     setLoggedIn(true);
+    console.log(user)
   }
   const logout =()=>{
     setUser(null);
     setLoggedIn(false);
+    console.log(user)
   }
   return (
     <UserContext.Provider value={{user,loggedIn,login,logout}}>
