@@ -28,7 +28,7 @@ const List=({navigation})=>{
         <Button
           key={item.id}
           title={item.name}
-          // Item 위치로 가면서 받을 값(id,name)을 같이 줘야함
+          // Item이 여러개라면 Item 위치로 가면서 받을 값(id,name)을 같이 줘야함
           onPress={()=>navigation.navigate('Item',{id:item._id,name:item.name})}
         />
       ))}

@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import StackNavigation from "./navigation/Stack";
 import { NavigationContainer } from "@react-navigation/native";
+import TabNavigation from "./navigation/Tap";
+import DrawerNavigation from "./navigation/Drawer";
 
 const Container = styled.View`
-  flex:1,
+  flex:1;
   background-color : #fff;
   justify-content:center;
   align-items:center;
@@ -14,7 +16,9 @@ const App=()=>{
     //NavigationContainer : 해당 컴포넌트로 둘러싼 컴포넌트에
     //네비게이션 기능을 적용해주는 컴포넌트
     <NavigationContainer>
-      <StackNavigation />
+      {/* <StackNavigation /> */}
+      {/* <TabNavigation/> */}
+      <DrawerNavigation/>
     </NavigationContainer>
   )
 }
