@@ -4,7 +4,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { validateEmail,removeWhiteSpace } from "../utils/common";
 import { useEffect, useRef, useState } from "react";
 import { images } from "../utils/images";
-
+import { signup } from "../utils/firebase";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   flex :1;
@@ -80,20 +81,29 @@ if(removeWhiteSpace(name).trim()===''){
  },[name,email,password,passwordConfirm,errorMessage])
   
   
-  const _handleSignupButtonPress=()=>{
-    alert('signup!')
+  const _handleSignupButtonPress=async()=>{
+    try {
+      const user = await signup({email,password,name,photoUrl});
+      console.log(user);
+      Alert.alert("Signup Success",user.email);
+    } catch (error) {
+      Alert.alert('Signup Error',error.message);
+    }
   }
 
   return(
   <KeyboardAwareScrollView
     // contentContainerStyle={{flex:1}}
-    extraHeight={80}
+    extraHeight={100}
     enableOnAndroid={true}  
   >
     <Container>
       <Image url={photoUrl} 
-      rounded={true}/>
-
+      rounded={true}
+      showButton
+      onChangeImage={(uri) => {
+    console.log('📷 이미지 선택됨:', uri);
+    setPhotoUrl(uri);}}/>
       <Input
         label='name'
         value={name}

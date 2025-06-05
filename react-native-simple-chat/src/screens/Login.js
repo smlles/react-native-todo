@@ -5,7 +5,10 @@ import { images } from "../utils/images";
 import { useState,useRef,useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { removeWhiteSpace, validateEmail } from "../utils/common";
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, Alert } from 'react-native';
+import { login } from "../utils/firebase";
+
+
 const Container = styled.View`
   flex:1;
   justify-content : center;
@@ -53,8 +56,16 @@ const Login=({navigation})=>{
     setPassword(removeWhiteSpace(password));
   }
 
-  const _handleLoginButtonPress=()=>{
-
+  const _handleLoginButtonPress= async () => {
+    try {
+      const user = await login({email,password});
+      
+      alert('Login Success',user.email);
+    } catch (error) {
+      alert('Login Error',error.message)
+    }
+      
+    
   }
 
 
@@ -73,7 +84,6 @@ const Login=({navigation})=>{
        keyboardShouldPersistTaps="handled"
     >
       <Container>
-        
         <Image url={images.logo} imageStyle ={{borderRadius:10}}/>
         <Input 
           label='Email'
