@@ -79,3 +79,6 @@ const uploadImage = async uri => {
   return await getDownloadURL(storageRef);
 }
 
+export const logout=async()=>{
+  return await auth.signOut();
+}

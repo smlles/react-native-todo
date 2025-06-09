@@ -7,6 +7,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { removeWhiteSpace, validateEmail } from "../utils/common";
 import { TouchableOpacity, Text, Alert } from 'react-native';
 import { login } from "../utils/firebase";
+import { useContext } from "react";
+import { ProgressContext,ProgressProvider,UserContext } from "../contexts";
+import Spinner from "../components/Spinner";
 
 
 const Container = styled.View`
@@ -26,6 +29,8 @@ const ErrorText = styled.Text`
 `
 
 const Login=({navigation})=>{
+  const {spinner} = useContext(ProgressContext)
+
   const [email,setEmail]=useState('');
   //이메일(위),비밀번호(아래)
   const [password,setPassword]=useState('');
@@ -35,6 +40,7 @@ const Login=({navigation})=>{
   const [disabled,setIsDisabled]=useState(true);
   const passwordRef=useRef();
 
+  const {dispatch}=useContext(UserContext);
   //email,password,errorMessage의 state값이 변할 때 마다
   //조건에 맞게 disabled의 state 값을 세팅한다.
   useEffect(()=>{
@@ -56,13 +62,26 @@ const Login=({navigation})=>{
     setPassword(removeWhiteSpace(password));
   }
 
+  // 로그인 버튼 눌렀을 때, inProgress 상태를 변경하여 Spinner 렌더링 하기
+// 로그인 끝나면 spinner 종료
+
+//로그인 한 후, Context에 email과 uid 전달하기
+
   const _handleLoginButtonPress= async () => {
     try {
-      const user = await login({email,password});
+      spinner.start();
       
-      alert('Login Success',user.email);
+      const user = await login({email,password});
+      //userContext의 dispatch를 통해 user의 상태가 
+      //인증된 사용자 정보로 변경됨
+      // dispatch(user.email,user.uid)= 구조분해 아닐 때
+      dispatch(user)
+      // = dispatch에서 구조분해해야함
+      Alert.alert('Login Success',user.email);
     } catch (error) {
       alert('Login Error',error.message)
+    } finally{
+      spinner.stop();
     }
       
     

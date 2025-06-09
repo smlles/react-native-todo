@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { images } from "../utils/images";
 import { signup } from "../utils/firebase";
 import { Alert } from "react-native";
+import { useContext } from "react";
+import { ProgressContext,UserContext } from "../contexts";
 
 const Container = styled.View`
   flex :1;
@@ -15,8 +17,6 @@ const Container = styled.View`
   padding : 20px 10px;
 `
 const ErrorText =styled.Text`
-
-  
   align-items:flex-start;
   width:90%;
   height:20px;
@@ -34,6 +34,10 @@ const Signup =()=>{
   const[errorMessage,setErrorMessage]=useState('');
   const[disabled,setIsDisabled]=useState(true);
   const [photoUrl, setPhotoUrl] = useState(images.photo);
+
+
+  const {spinner} =useContext(ProgressContext);
+  const {dispatch}=useContext(UserContext);
 
   const emailRef=useRef();
   const passwordRef=useRef();
@@ -83,11 +87,15 @@ if(removeWhiteSpace(name).trim()===''){
   
   const _handleSignupButtonPress=async()=>{
     try {
+      spinner.start();
       const user = await signup({email,password,name,photoUrl});
+      dispatch(user)
       console.log(user);
       Alert.alert("Signup Success",user.email);
     } catch (error) {
       Alert.alert('Signup Error',error.message);
+    }finally{
+      spinner.stop();
     }
   }
 

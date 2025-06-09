@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
 import {images} from "./utils/images";
+import { ProgressProvider,UserProvider } from "./contexts/index";
+
 
 // expo-asset : 로컬 이미지 / 파일을 앱에 미리 로드할 때 사용하는 패키지
 import { Asset } from 'expo-asset';
@@ -84,8 +86,12 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <StatusBar barStyle="dark-content" />
-            <Navigation />
+            <UserProvider>
+                <ProgressProvider>
+                    <StatusBar barStyle ="dark-content" />
+                    <Navigation />
+                </ProgressProvider>
+            </UserProvider>    
         </ThemeProvider>
     )
 }
