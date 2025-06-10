@@ -12,6 +12,12 @@ import {
     uploadBytes,// storage에 파일을 업로드하는 함수
     getDownloadURL, //Storage에 업로드된 파일의 다운로드 URL을 가져온다.
  } from "firebase/storage";
+import { 
+  collection,
+  getFirestore,
+  doc,
+  setDoc 
+} from "firebase/firestore";
 
 
 //iniitializeApp() 
@@ -19,9 +25,14 @@ import {
 //config에 들어있는 정보로 firebase랑 연결해줘
 
 // Initialize Firebase
-export const app = initializeApp(config);
 
+export const app = initializeApp(config);
+// 인증모듈 가져오기
 const auth = getAuth(app);
+  //Storage 인스턴스를 생성
+ const storage = getStorage(app);
+ //firestore dB 모듈 가져오기
+export const db = getFirestore(app);
 
 export const login = async ({ email, password }) => {
   const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -66,8 +77,6 @@ const uploadImage = async uri => {
   //현재 로그인한 유저의 uid를 가져온다.
   const {uid} = auth.currentUser;
 
-  //Storage 인스턴스를 생성
-  const storage = getStorage(app);
   //Storage에 저장할 파일 경로를 설정
   const storageRef = ref(storage, `/profile/${uid}/photo.png`);
 
@@ -81,4 +90,65 @@ const uploadImage = async uri => {
 
 export const logout=async()=>{
   return await auth.signOut();
+}
+
+export const getCurrentUser =()=>{
+  //auth.currentUser에 로그인 된 사용자 정보가 있음
+  //Profile 페이지도 인증이 필요한 화면이니까 email과 uid 필요
+  //이름, 프로필 사진도 가져와야함
+  //위에서부터 사진,이메일,이름,로그아웃
+  //email,uid,name,photoUrl을 
+  //구조분해 할당으로 객체 리터럴로 받아서 반환하기
+  const {uid,email,displayName,photoURL}=auth.currentUser;
+  return {
+    uid,
+    email,
+    name : displayName,
+    photoUrl: photoURL
+  }
+}
+
+//프로필 사진 업데이트
+export const updateUserPhoto =async photoUrl =>{
+  //1.현재 로그인 한 사용자 불러오기.
+  const user = auth.currentUser;
+  //2.인자로 받은 photoUrl이 https로 시작하면 url 그대로 사용
+  //아니라면, Storage에 업로드 후 firebase Storage URL 획득
+  const storageUrl = photoUrl.startsWith('https') ? photoUrl : await uploadImage(photoUrl);
+  
+  //firebase auth의 updateProfile로 프로필사진 주소 수정
+  await updateProfile(user, {photoURL:storageUrl});
+  //업데이트된 사용자 정보를 객체 형태로 반환
+  
+  return {
+    name : user.displayName,
+    email:user.email,
+    photoUrl:user.photoURL,
+  }
+}
+
+//문서 생성하기;
+export const createChannel =async({title,description})=>{
+  // 1. 'channels' 컬렉션 참조 가져오기
+  const ChannelCollection = collection(db,'channels');
+
+  // 2. 새 문서에 대한 참조 생성
+  const newChannelRef =doc(ChannelCollection);
+
+  // 3. 채널에 할당 될 고유 ID
+  const id = newChannelRef.id;
+
+  //4. 새 채널에 들어갈 필드값 구성
+  const newChannel = {
+    id,
+    title,
+    description,
+    createAt:Date.now(),
+  }
+  
+  //5. setDoc로 해당 문서 경로에 데이터 쓰기
+  await setDoc(newChannelRef,newChannel);
+
+  //6. 생성된 문서 ID 반환
+  return id;
 }

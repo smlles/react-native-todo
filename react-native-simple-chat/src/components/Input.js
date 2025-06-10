@@ -22,7 +22,7 @@ const StyledTextInput= styled.TextInput.attrs(({theme})=>({
   placeholderTextColor:theme.inputPlaceholder,
 
 }))`
-  background-color:${({theme})=>theme.background};
+  background-color:${({theme,editable})=> editable ? theme.background : theme.inputDisabledBackground};
   color : ${({theme})=>theme.text};
   padding:20px 10px;
   font-size:16px;
@@ -41,7 +41,8 @@ const Input =forwardRef(
   placeholder,
   isPassword,
   returnKeyType,
-  maxLength
+  maxLength,
+  disabled
   },ref)=>{
   const [isFocused,setIsFocused]=useState(false);
   return(
@@ -66,6 +67,7 @@ const Input =forwardRef(
         autoCorrect={false} //자동 맞춤법 수정 (끄기)
         textContentType='none' //ios전용 속성 : 입력 데이터 자동완성, 자동 채우기 같은 제안 컨트롤
         underLineColorAndroid="transparent" //Android 전용 속성 : 기본적으로 TextInput에 밑줄이 생기는 것을 투명화
+        editable={!disabled}
       />
     </Container>
   )

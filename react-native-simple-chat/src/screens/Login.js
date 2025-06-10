@@ -72,6 +72,7 @@ const Login=({navigation})=>{
       spinner.start();
       
       const user = await login({email,password});
+      console.log(user);
       //userContext의 dispatch를 통해 user의 상태가 
       //인증된 사용자 정보로 변경됨
       // dispatch(user.email,user.uid)= 구조분해 아닐 때

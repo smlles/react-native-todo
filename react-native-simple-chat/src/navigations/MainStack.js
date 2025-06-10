@@ -18,6 +18,7 @@ const MainStack=()=>{
         cardStyle:{backgroundColor:theme.backgroundColor},
         headerBackTitleVisible:false
       }}>
+        {/* 바텀탭을 스크린으로 넣었음 */}
       <Stack.Screen 
         name="Main" 
         component={MainTab}
