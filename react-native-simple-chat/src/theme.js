@@ -31,6 +31,8 @@ export const theme ={
   buttonTitle:colors.white,
   buttonUnFilledTitle : colors.blue,
   buttonLogout : colors.red,
+  sendButtonctive:colors.blue,
+  sendButtonInactive:colors.grey_1,
 
   //헤더
   headerTintColor:colors.black,
@@ -41,8 +43,13 @@ export const theme ={
   
   //Tab style
   tabActiveColor : colors.blue,
-  tabInactiveColor : colors.grey_1
+  tabInactiveColor : colors.grey_1,
 
-  
+  //List style
+  listTime : colors.grey_1,
+  listDescriptiojn : colors.grey_1,
+  listIcon : colors.black,
+  listBorder : colors.grey_0,
+
 }
 

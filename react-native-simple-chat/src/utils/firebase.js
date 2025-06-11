@@ -16,7 +16,9 @@ import {
   collection,
   getFirestore,
   doc,
-  setDoc 
+  setDoc,
+  addDoc, 
+  serverTimestamp
 } from "firebase/firestore";
 
 
@@ -130,6 +132,7 @@ export const updateUserPhoto =async photoUrl =>{
 //문서 생성하기;
 export const createChannel =async({title,description})=>{
   // 1. 'channels' 컬렉션 참조 가져오기
+  // 없는 컬렉션을 참조한대도 에러는 안난다
   const ChannelCollection = collection(db,'channels');
 
   // 2. 새 문서에 대한 참조 생성
@@ -149,6 +152,24 @@ export const createChannel =async({title,description})=>{
   //5. setDoc로 해당 문서 경로에 데이터 쓰기
   await setDoc(newChannelRef,newChannel);
 
+  // 컬렉션은 없지만, 문서를 저장하면서 자동으로 만든다
+
   //6. 생성된 문서 ID 반환
   return id;
+}
+
+export const createMessage=async({channelId,text})=>{
+  console.log('Sending message to channel : ',channelId,text)
+
+  try{
+    const collectionRef=collection(db,`channels/${channelId}/messages`)
+    await  addDoc(collectionRef,{
+      text,
+      createdAt:serverTimestamp(),
+    })
+    console.log('Message added successfully!');
+  }catch(error){
+    console.error('Message added fail',error);
+  }
+
 }
