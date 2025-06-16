@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { StatusBar, Text } from "react-native";
 import styled from "styled-components";
 import BoardScreen from "./screens/BoardScreen";
 import StackNavigation from "./navigation/StackNavigation";
@@ -12,6 +12,7 @@ const Container = styled.View`
 const App=()=> {
   return (
     <NavigationContainer>
+      <StatusBar barStyle='light-content'/>
       <StackNavigation/>
     </NavigationContainer>
   );
